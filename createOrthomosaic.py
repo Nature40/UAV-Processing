@@ -33,13 +33,14 @@ def createOrtho(chunk, doc = Metashape.app.document, orthoRes = 0.05):
     
     # export ortho
     chunk.resetRegion()
-    chunk.exportOrthomosaic(str(outpath + "_" + str(chunk.label) + ".tif"), projection = crs, raster_transform = Metashape.RasterTransformNone,
+    chunk.exportOrthomosaic(str(outpath + "_" + str(chunk.label) + "_orthomosaic.tif"), projection = crs, raster_transform = Metashape.RasterTransformNone,
 				write_kml=True, write_world=False, write_alpha=True, tiff_big=True, tiff_compression=Metashape.TiffCompressionNone, white_background=True,dx=orthoRes,dy=orthoRes)
     
     
     
-def createOrthoControll(allchunks):  
-    print(allchunks)
+def createOrthoControl(allchunks):  
+    
+
     if allchunks == "1": 
         for i in Metashape.app.document.chunks:
             createOrtho(chunk = i)
@@ -49,4 +50,4 @@ def createOrthoControll(allchunks):
         
 # RUN CONTROL
 
-createOrthoControll(allchunks)
+createOrthoControl(allchunks)

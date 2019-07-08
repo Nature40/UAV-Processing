@@ -30,7 +30,7 @@ def filterSparse(chunk, doc = Metashape.app.document, alignQuality = 2, kpl = 40
     
     # export original tiepoints
     
-    chunk.exportPoints(str(outpath + "_" + str(chunk.label) + "_original.las"), source = Metashape.DataSource.PointCloudData, colors = True, projection = crs)
+    chunk.exportPoints(str(outpath + "_" + str(chunk.label) + "_tiepoints_original.las"), source = Metashape.DataSource.PointCloudData, colors = True, projection = crs)
        
     # # # # FILTER CLOUDS # # # #
     #----------------------------------------------------
@@ -64,7 +64,7 @@ def filterSparse(chunk, doc = Metashape.app.document, alignQuality = 2, kpl = 40
     
     # export filtered tiepoints
     chunk.resetRegion()
-    chunk.exportPoints(str(outpath + "_" + str(chunk.label) + "_filtered.las"), source = Metashape.DataSource.PointCloudData, colors = True, projection = crs)
+    chunk.exportPoints(str(outpath + "_" + str(chunk.label) + "_tiepoints_filtered.las"), source = Metashape.DataSource.PointCloudData, colors = True, projection = crs)
         
     # save document
     doc.read_only = False
