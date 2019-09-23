@@ -36,7 +36,7 @@ def createOrtho(chunk, doc = Metashape.app.document, orthoRes = 0.05):
     chunk.exportOrthomosaic(str(outpath + "_" + str(chunk.label) + "_orthomosaic.tif"), projection = crs, raster_transform = Metashape.RasterTransformNone,
 				write_kml=True, write_world=False, write_alpha=True, tiff_big=True, tiff_compression=Metashape.TiffCompressionNone, white_background=True,dx=orthoRes,dy=orthoRes)
     
-    
+    chunk.exportReport(outpath + "_" + chunk.label + "_report.pdf")
     
 def createOrthoControl(allchunks):  
     

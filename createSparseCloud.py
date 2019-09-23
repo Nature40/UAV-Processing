@@ -70,6 +70,9 @@ def filterSparse(chunk, doc = Metashape.app.document, alignQuality = 2, kpl = 40
     doc.read_only = False
     doc.save()
     
+    # create report
+    chunk.exportReport(outpath + "_" + chunk.label + "_report.pdf")
+    
 
 
 # control: do with all chunks or just the active one
