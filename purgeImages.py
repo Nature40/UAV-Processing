@@ -19,6 +19,9 @@ import os
 
 def purgeImages(chunk,  doc = Metashape.app.document):
     
+    
+    
+    
     # get list of all images in chunk
     usedImg = []
     for c in chunk.cameras:
@@ -27,10 +30,17 @@ def purgeImages(chunk,  doc = Metashape.app.document):
     allImg = glob.glob(os.path.dirname(usedImg[0]) + "/*.JPG")
     rmImg = set(allImg) - set(usedImg)
     
+    # confirmation prompt
+    confirm_msg = "Remove unused Cameras from Harddrive? Yes = 1, No = 0"
+    confirm = Metashape.app.getInt(confirm_msg ,0)
     
     
-    print(len(allImg), len(usedImg), len(rmImg))
-    return(rmImg)
+    if (confirm == 1):
+        for i in rmImg:
+            os.remove(i)
+        print("Removed images")
+    else:
+        print("Deleting images needs confirmation!")
 
 
 # run function    
