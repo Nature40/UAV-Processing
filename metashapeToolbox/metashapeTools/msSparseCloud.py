@@ -9,33 +9,25 @@ Created on Thu Jul  4 10:00:09 2019
 """
 
 import Metashape
-import sys
-
-# control: do with all chunks or just the active one
-allchunks = sys.argv[1]
 
 
-
-def filterSparse(chunk, doc = Metashape.app.document, alignQuality = 2, kpl = 40000, tpl = 4000):
-    
-    outpath = doc.path[:-4]  # project path without file extension
-    crs = Metashape.CoordinateSystem("EPSG::25832")
+def createSparse(chunk, doc = Metashape.app.document, alignQuality = Metashape.Accuracy.HighAccuracy, kpl = 40000, tpl = 4000):
     
     # align photos
-    chunk.matchPhotos(accuracy=alignQuality, preselection = Metashape.ReferencePreselection,
+    chunk.matchPhotos(accuracy=alignQuality, reference_preselection = True,
                       keypoint_limit = kpl, tiepoint_limit = tpl)
     
-    chunk.alignCameras()
+    chunk.alignCameras(adaptive_fitting = True)
     chunk.resetRegion()
     
-    # export original tiepoints
+    # save document
+    doc.read_only = False
+    doc.save()
+
+
+def filterSparse(chunk, doc = Metashape.app.document):
     
-    chunk.exportPoints(str(outpath + "_" + str(chunk.label) + "_tiepoints_original.las"), source = Metashape.DataSource.PointCloudData, colors = True, projection = crs)
-       
-    # # # # FILTER CLOUDS # # # #
-    #----------------------------------------------------
     MF = Metashape.PointCloud.Filter()
-        
     # Reconstruction Accuracy Filter
     for i in range(3-1):
         MF.init(chunk, Metashape.PointCloud.Filter.ReconstructionUncertainty)		
@@ -61,7 +53,13 @@ def filterSparse(chunk, doc = Metashape.app.document, alignQuality = 2, kpl = 40
         chunk.resetRegion()
         
     #------------------------------------------------------------------------
-    
+
+
+def exportSparse(chunk, doc = Metashape.app.document):
+
+    outpath = doc.path[:-4]  # project path without file extension
+    crs = Metashape.CoordinateSystem("EPSG::25832")
+
     # export filtered tiepoints
     chunk.resetRegion()
     chunk.exportPoints(str(outpath + "_" + str(chunk.label) + "_tiepoints_filtered.las"), source = Metashape.DataSource.PointCloudData, colors = True, projection = crs)
@@ -73,20 +71,4 @@ def filterSparse(chunk, doc = Metashape.app.document, alignQuality = 2, kpl = 40
     # create report
     chunk.exportReport(outpath + "_" + chunk.label + "_report.pdf")
     
-
-
-# control: do with all chunks or just the active one
-def filterSparseControl(allchunks):  
-    print(allchunks)
-    if allchunks == "1": 
-        for i in Metashape.app.document.chunks:
-            filterSparse(chunk = i)
-    else:
-        filterSparse(chunk = Metashape.app.document.chunk)
-
-        
-# RUN CONTROL
-
-filterSparseControl(allchunks)
-
 
