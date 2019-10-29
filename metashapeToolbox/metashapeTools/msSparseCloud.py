@@ -61,14 +61,12 @@ def exportSparse(chunk, doc = Metashape.app.document):
     crs = Metashape.CoordinateSystem("EPSG::25832")
 
     # export filtered tiepoints
-    chunk.resetRegion()
-    chunk.exportPoints(str(outpath + "_" + str(chunk.label) + "_tiepoints_filtered.las"), source = Metashape.DataSource.PointCloudData, colors = True, projection = crs)
+    chunk.exportPoints(str(outpath + "_" + str(chunk.label) + "_tiepoints.las"), source = Metashape.DataSource.PointCloudData, colors = True, projection = crs)
         
     # save document
     doc.read_only = False
     doc.save()
     
-    # create report
-    chunk.exportReport(outpath + "_" + chunk.label + "_report.pdf")
+
     
 
