@@ -10,7 +10,7 @@ import Metashape
 
 # control: do with all chunks or just the active one
 def sparse2ortho(chunk, doc = Metashape.app.document, orthoRes = 0.05):
-    crs = Metashape.CoordinateSystem("EPSG::4326")
+    crs = Metashape.CoordinateSystem("EPSG::25832")
     
     # create mesh
     chunk.resetRegion()
