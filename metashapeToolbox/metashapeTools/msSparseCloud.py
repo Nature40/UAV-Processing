@@ -11,10 +11,10 @@ Created on Thu Jul  4 10:00:09 2019
 import Metashape
 
 
-def createSparse(chunk, doc = Metashape.app.document, alignQuality = Metashape.Accuracy.HighAccuracy, kpl = 40000, tpl = 4000):
+def createSparse(chunk, doc = Metashape.app.document, kpl = 40000, tpl = 4000):
     
     # align photos
-    chunk.matchPhotos(accuracy=alignQuality, reference_preselection = True,
+    chunk.matchPhotos(downscale = 1, reference_preselection = True,
                       keypoint_limit = kpl, tiepoint_limit = tpl)
     
     chunk.alignCameras(adaptive_fitting = True)
@@ -33,7 +33,7 @@ def filterSparse(chunk, doc = Metashape.app.document):
         MF.init(chunk, Metashape.PointCloud.Filter.ReconstructionUncertainty)		
         MF.selectPoints(50)
         chunk.point_cloud.removeSelectedPoints()
-        chunk.optimizeCameras(fit_f=True, fit_cxcy=True, fit_aspect=True, fit_skew=True, fit_k1k2k3=True, fit_p1p2=True, fit_k4=True)
+        chunk.optimizeCameras(fit_f=True, fit_cx=True, fit_cy = True, fit_b1=True, fit_b2 = True, fit_k1 = True, fit_k2 = True, fit_k3 = True, fit_k4=True, fit_p1 = True, fit_p2 =True)
         chunk.resetRegion()     
     
     # Reprojection Error Filter
@@ -41,7 +41,7 @@ def filterSparse(chunk, doc = Metashape.app.document):
         MF.init(chunk, Metashape.PointCloud.Filter.ReprojectionError)		
         MF.selectPoints(1)
         chunk.point_cloud.removeSelectedPoints()
-        chunk.optimizeCameras(fit_f=True, fit_cxcy=True, fit_aspect=True, fit_skew=True, fit_k1k2k3=True, fit_p1p2=True, fit_k4=True)
+        chunk.optimizeCameras(fit_f=True, fit_cx=True, fit_cy = True, fit_b1=True, fit_b2 = True, fit_k1 = True, fit_k2 = True, fit_k3 = True, fit_k4=True, fit_p1 = True, fit_p2 =True)
         chunk.resetRegion()
     
     # Projection Accuracy Filter    
@@ -49,7 +49,7 @@ def filterSparse(chunk, doc = Metashape.app.document):
         MF.init(chunk, Metashape.PointCloud.Filter.ProjectionAccuracy)		
         MF.selectPoints(10)
         chunk.point_cloud.removeSelectedPoints()	
-        chunk.optimizeCameras(fit_f=True, fit_cxcy=True, fit_aspect=True, fit_skew=True, fit_k1k2k3=True, fit_p1p2=True, fit_k4=True)
+        chunk.optimizeCameras(fit_f=True, fit_cx=True, fit_cy = True, fit_b1=True, fit_b2 = True, fit_k1 = True, fit_k2 = True, fit_k3 = True, fit_k4=True, fit_p1 = True, fit_p2 =True)
         chunk.resetRegion()
         
     #------------------------------------------------------------------------
@@ -61,7 +61,7 @@ def exportSparse(chunk, doc = Metashape.app.document):
     crs = Metashape.CoordinateSystem("EPSG::25832")
 
     # export filtered tiepoints
-    chunk.exportPoints(str(outpath + "_" + str(chunk.label) + "_tiepoints.las"), source = Metashape.DataSource.PointCloudData, colors = True, projection = crs)
+    chunk.exportPoints(str(outpath + "_" + str(chunk.label) + "_tiepoints.las"), source_data = Metashape.DataSource.PointCloudData, save_colors = True, crs = crs)
         
     # save document
     doc.read_only = False

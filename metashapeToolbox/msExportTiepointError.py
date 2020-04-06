@@ -76,6 +76,6 @@ def msExportTiepointError(chunk, filename = None):
   writeErrors(chunk, filename)
 
 
-
-msExportTiepointError(chunk = Metashape.app.document.chunk)
+for chunk in Metashape.app.document.chunks:
+	msExportTiepointError(chunk)
 
